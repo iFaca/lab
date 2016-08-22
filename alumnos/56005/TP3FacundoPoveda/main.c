@@ -3,7 +3,8 @@
 int main (int arg, char **argv){
 	char * archivo;
         int palabrasTotales;
-	int hijos;
+	int hijo;
+	int memoria;
 
 	//Leemos el archivo y se lo pasamos a una variable
     	archivo = argv[1];
@@ -17,8 +18,11 @@ int main (int arg, char **argv){
 	return 0;
 	}
 	
+	//Creamos la memoria compartida
+	memoria = crearMemoria(archivo);
+
 	//Creamos el padre y el hijo
-        hijos = crearHijo();
+        hijo = crearHijo();
 
 	//Creación de procesos padre-hijo, memoria compartida y semaforos
 	//crearHijos(numHijos,menorMayor,archivo,palabrasTotales);
