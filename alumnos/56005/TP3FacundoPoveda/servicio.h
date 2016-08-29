@@ -12,6 +12,7 @@
 #include <unistd.h> //(for a bunch of stuff)
 #include <netdb.h> //(for various network functions and constants)
 #define BUFFER 1000
+#define MEMORY 1024
 #include <sys/mman.h>
 #include <fcntl.h>
 #include <sys/ipc.h>
@@ -19,7 +20,6 @@
 
 int main (int, char **);
 int contarPalabras (char*);
-int crearHijo();
 int crearMemoria(char *);
 
 #endif
