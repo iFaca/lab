@@ -9,12 +9,13 @@ void conteo(int fileSize, char *buffer){
     	//int j=0;
 	//int aux;
 	//int aux2;
-	printf("ENTROO");	
+		printf("ENTROOOOOOOOOOOO \n");	
 
 		//Limpiamos el vector que vamos a llenar
 		for(i=0;i<15;i++){
 			vectorLetras[i]=0;
 		}
+		printf("Primer for \n");
 		//Cargamos el vector paralelo con la cantidad de letras por palabras
 		for(i=0;i<15;i++){
 			vectorParalelo[i]=m;
@@ -82,7 +83,7 @@ void conteo(int fileSize, char *buffer){
 				vectorLetras[14]++;
 			}
 		}
-/*
+		/*
 		//Si el orden es de menor a mayor
 		if (menorMayor==1){
 			//Ocupamos el método burbuja para ordenar el vector
@@ -116,6 +117,7 @@ void conteo(int fileSize, char *buffer){
 
 		}
 		*/
+		printf("SALIOOOO \n");
 		printf("vectorLetras 0 %d \n", vectorLetras[0]);
  		printf("vectorLetras 1 %d \n", vectorLetras[1]);
  		printf("vectorLetras 2 %d \n", vectorLetras[2]);

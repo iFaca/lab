@@ -49,7 +49,7 @@ int crearMemoria (char * archivo){
 
 			//Hacemos el conteo de las palabras y letras del archivo
 			conteo(fileSize,puntero);			
-
+			printf("Pasamos \n");
 			//Escribimos el resultado del conteo en la memoria compartida
 
 
