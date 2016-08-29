@@ -46,10 +46,9 @@ int crearMemoria (char * archivo){
         	case 0:
 			//hijo
         		printf("Soy el hijo: %d - Mi Padre es: %d \n", getpid(), getppid());
-	
-			//Leemos el archivo de la memoria compartida
-			printf("El valor de cnt es: %s \n", puntero);
+
 			//Hacemos el conteo de las palabras y letras del archivo
+			conteo(fileSize,puntero);			
 
 			//Escribimos el resultado del conteo en la memoria compartida
 

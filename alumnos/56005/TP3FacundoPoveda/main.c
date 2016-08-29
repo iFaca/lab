@@ -2,7 +2,7 @@
 
 int main (int arg, char **argv){
 	char * archivo;
-        int palabrasTotales;
+    int palabrasTotales;
 	int memoria;
 
 	//Leemos el archivo y se lo pasamos a una variable
@@ -20,7 +20,5 @@ int main (int arg, char **argv){
 	//Creamos la memoria compartida
 	memoria = crearMemoria(archivo);
 
-	//Creación de procesos padre-hijo, memoria compartida y semaforos
-	//crearHijos(numHijos,menorMayor,archivo,palabrasTotales);
 	return 0;
 }
