@@ -8,7 +8,6 @@ int crearMemoria (char * archivo){
 	char *charMmap;
 	int *intMmap;
 	int i;
-	int cantPasadas = 0;
 	pid_t pid;
 	sem_t *semaforo;
 	//sem_t *semaforo2;
@@ -18,15 +17,9 @@ int crearMemoria (char * archivo){
 
 	//Creamos el primer semáforo
 	//semaforo2 = sem_open("SemaforoB", O_CREAT , 0666 , 0);
-
-	//Vamos leyendo partes del archivo
-	while ((fileSize = read (file,buffer,sizeof(buffer))) == BUFFER){
-		cantPasadas++;	
-		fileSize += fileSize; 
-	}
-
-	//Calculamos el tamaño del archivo multiplicando la cantidad de pasadas por las veces que se llenó el buffer
-	fileSize = fileSize + BUFFER * cantPasadas;
+	
+	//Leemos el tamaño del archivo
+	fileSize = read (file,buffer,sizeof(buffer));
 	printf("Tamaño del archivo %d \n",fileSize);
 
 	//Creamos un espacio de memoria compartida para guardar el texto del buffer	
