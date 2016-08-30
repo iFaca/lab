@@ -17,6 +17,7 @@
 #include <fcntl.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include <semaphore.h>
 
 int main (int, char **);
 int contarPalabras (char*);

@@ -5,6 +5,7 @@ int crearMemoria (char * archivo){
 	int file;
 	char buffer[BUFFER];
 	pid_t pid;
+	sem_t *semaforo;
 	char *charMmap;
 	int *intMmap;
 	int i;
@@ -31,6 +32,9 @@ int crearMemoria (char * archivo){
 	*(charMmap+i)=buffer[i];	
 	}	
 	
+	//Creamos el semaforo
+	semaforo = sem_open("Semaforo", O_CREAT , 0666 , 0);
+		
 	//Creamos el hijo
         pid = fork();
 
@@ -44,10 +48,13 @@ int crearMemoria (char * archivo){
         		printf("Soy el hijo: %d - Mi Padre es: %d \n", getpid(), getppid());
 			//Hacemos el conteo de las palabras y letras del archivo
 			conteo( fileSize , charMmap , intMmap);
+			//Le sumamos 1 al semaforo
+			sem_post(semaforo);
 			break;
 		default:
+			//Le restamos 1 al semaforo
+			sem_wait(semaforo);
         		//padre
-			sleep(1);
         		printf("Soy el padre: %d \n", getpid());
 			//Leemos el conteo de la memoria compartida y lo imprimimos por pantalla
                         for (i = 0; i < 15 ; i++){
