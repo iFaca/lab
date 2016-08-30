@@ -1,13 +1,12 @@
 #include "servicio.h"
 
 int crearMemoria (char * archivo){
-        int fd = 0;
 	int fileSize;
 	int file;
 	char buffer[BUFFER];
 	pid_t pid;
-	char *puntero;
-	//int *aux;
+	char *charMmap;
+	int *intMmap;
 	int i;
 	
 	//Abrimos el arhivo que le pasamos como parámetro
@@ -17,12 +16,9 @@ int crearMemoria (char * archivo){
 	fileSize = read (file,buffer,sizeof(buffer));
 	printf("Tamaño del archivo %d \n",fileSize);
 
-	//Escribimos el contenido del archivo en un buffer
-	 write (file,buffer,fileSize);
-
 	//Creamos la memoria compartida	
-	puntero = mmap(NULL, fileSize , PROT_READ | PROT_WRITE , MAP_SHARED|MAP_ANONYMOUS , -1 , 0);
-	//aux = mmap(NULL , 30 , PROT_READ | PROT_WRITE , MAP_SHARED|MAP_ANONYMOUS , -1 , 0);
+	charMmap = mmap(NULL, fileSize , PROT_READ | PROT_WRITE , MAP_SHARED|MAP_ANONYMOUS , -1 , 0);
+	intMmap = mmap(NULL, sizeof(int)*15, PROT_READ | PROT_WRITE , MAP_SHARED|MAP_ANONYMOUS , -1 , 0);	
 	
     	//Cerramos el descriptor
     	if (close (file) == -1) {
@@ -32,7 +28,7 @@ int crearMemoria (char * archivo){
 	
 	//Escribimos en la memoria compartida
 	for (i=0;i<fileSize;i++){
-	*(puntero+i)=buffer[i];	
+	*(charMmap+i)=buffer[i];	
 	}	
 	
 	//Creamos el hijo
@@ -46,22 +42,18 @@ int crearMemoria (char * archivo){
         	case 0:
 			//hijo
         		printf("Soy el hijo: %d - Mi Padre es: %d \n", getpid(), getppid());
-
 			//Hacemos el conteo de las palabras y letras del archivo
-			conteo(fileSize,puntero);			
-			printf("Pasamos \n");
-			//Escribimos el resultado del conteo en la memoria compartida
-
-
+			conteo( fileSize , charMmap , intMmap);
 			break;
 		default:
         		//padre
 			sleep(1);
         		printf("Soy el padre: %d \n", getpid());
 			//Leemos el conteo de la memoria compartida y lo imprimimos por pantalla
-
+                        for (i = 0; i < 15 ; i++){
+                        printf("Palabras de longitud %d = %d \n", i+1, *(intMmap+i));
+                        }
        			break;
 	}
-        close(fd);
 	return 0;
 }

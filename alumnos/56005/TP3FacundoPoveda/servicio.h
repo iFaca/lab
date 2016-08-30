@@ -21,6 +21,6 @@
 int main (int, char **);
 int contarPalabras (char*);
 int crearMemoria(char *);
-void conteo(int, char*);
+int *conteo(int, char*,int*);
 
 #endif

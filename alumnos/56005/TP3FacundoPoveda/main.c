@@ -2,7 +2,7 @@
 
 int main (int arg, char **argv){
 	char * archivo;
-    int palabrasTotales;
+ 	int palabrasTotales;
 	int memoria;
 
 	//Leemos el archivo y se lo pasamos a una variable
