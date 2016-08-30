@@ -10,6 +10,7 @@ int palabras[15];
 for(i = 0 ; i < 15 ; i++){
 	palabras[i]=0;
 }
+
 //Contamos la cantidad de letras de cada palabra y la metemos en un vector
 for(i = 0 ; i < fileSize ; i++){
 	if (*(buffer+i) != ' '){
@@ -102,6 +103,7 @@ for(i = 0 ; i < fileSize ; i++){
 		}
 	}
 }
+
 //Pasamos el vector a la memoria compartida
 for(i = 0; i < 15; i++){
 	*(intMmap+i) = palabras [i];
