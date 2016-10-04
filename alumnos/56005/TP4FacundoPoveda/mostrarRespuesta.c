@@ -4,6 +4,7 @@ int mostrarRespuesta(int scd,char *aux){
 	//char server_reply[2000];
 	char *buffer=NULL;
 	int archivo;
+	int mostrar = 0;
 
 	static char* not_found =
 		"HTTP/1.1 404 Not Found\n"
@@ -16,7 +17,7 @@ int mostrarRespuesta(int scd,char *aux){
 		" </body>\n"
 		"</html>\n";
 	static char* ok_response_html =
-		"HTTP/1.0 200 OK\n"
+		"HTTP/1.0 200 OK"
 		"Content-type: text/html\n"
 		"\n";
 	static char* ok_response_txt =
@@ -44,24 +45,33 @@ int mostrarRespuesta(int scd,char *aux){
 
 	//Enviamos datos
 	if (!strcmp(aux,"faca.pdf")){
-		send(scd , ok_response_pdf , strlen(ok_response_pdf) , 0); 
+		send(scd , ok_response_pdf , strlen(ok_response_pdf) , 0);
+		mostrar = 1;
 	}else if (!strcmp(aux,"faca.jpg")){
 		send(scd , ok_response_jpg , strlen(ok_response_jpg) , 0);
+		mostrar = 1;
 	}else if (!strcmp(aux,"faca.html")){
 		send(scd , ok_response_html , strlen(ok_response_html) , 0);
+		mostrar = 1;
 	}else if (!strcmp(aux,"faca.txt")){
-	        send(scd , ok_response_txt , strlen(ok_response_txt) , 0);
-	}else{
+		send(scd , ok_response_txt , strlen(ok_response_txt) , 0);
+		mostrar = 1;
+        }else if (!strcmp(aux,"error")){
+                send(scd , internal_server_error , strlen(internal_server_error) , 0);
+        }else{
 		send(scd , not_found , strlen(not_found) , 0);
 	}
-		
+
 	//Le mostramos el archivo al cliente
-	archivo = open(aux, O_RDONLY, NULL);
-	while(read(archivo,&buffer,1)>0){
-	write(scd,&buffer,1);
+	if (mostrar == 1){
+		archivo = open(aux, O_RDONLY, NULL);
+		while(read(archivo,&buffer,1)>0){
+			write(scd,&buffer,1);
+		}
+		mostrar = 0;
 	}
 	puts("Datos enviados\n");
-		
+
 	/*
 	//Recibimos la respuesta del servidor
 	if( recv(scd, server_reply , 2000 , 0) < 0)
