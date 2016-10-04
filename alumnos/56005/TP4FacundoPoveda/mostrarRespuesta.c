@@ -2,9 +2,10 @@
 
 int mostrarRespuesta(int scd,char *aux){
 	//char server_reply[2000];
-	char *buffer=NULL;
 	int archivo;
 	int mostrar = 0;
+	int leido;
+        char buff[1024];
 
 	static char* not_found =
 		"HTTP/1.1 404 Not Found\n"
@@ -61,12 +62,13 @@ int mostrarRespuesta(int scd,char *aux){
         }else{
 		send(scd , not_found , strlen(not_found) , 0);
 	}
-
+	
+	printf("%i \n",mostrar);
 	//Le mostramos el archivo al cliente
 	if (mostrar == 1){
 		archivo = open(aux, O_RDONLY, NULL);
-		while(read(archivo,&buffer,1)>0){
-			write(scd,&buffer,1);
+		while((leido = read(archivo,buff,sizeof buff))>0){
+			write(scd,buff,leido);
 		}
 		mostrar = 0;
 	}
