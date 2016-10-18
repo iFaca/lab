@@ -17,6 +17,8 @@
 #include <sys/shm.h>
 #include <semaphore.h>
 #include <arpa/inet.h>
+#include <getopt.h>
+#include <pthread.h>
 #define BUFFER 1024
 
 int servidor (int, char **);
@@ -25,5 +27,6 @@ void enlazarAlPuerto(int,int);
 int mostrarRespuesta(int, char *);
 int identificarPuerto(char *);
 char* identificarRuta(char *);
+void* funcionHilo(void *);
 
 #endif

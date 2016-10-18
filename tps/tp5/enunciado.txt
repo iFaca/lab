@@ -1,3 +1,4 @@
+
 COMPUTACION II
 ==============
 
@@ -17,11 +18,11 @@ múltiples conexiones simultáneas.
 Requisitos
 ~~~~~~~~~~
 
-* El tp que no tenga el Makefile correspondiente se considerará desaprobado.
+LISTO * El tp que no tenga el Makefile correspondiente se considerará desaprobado. 
 
-* El tp que no tenga como mínimo 5 módulos se considerará desaprobado.
+LISTO * El tp que no tenga como mínimo 5 módulos se considerará desaprobado. 
 
-* Que sea configurable vía un archivo de configuración. En el mismo deberán ser parametrizables 
+LISTO * Que sea configurable vía un archivo de configuración. En el mismo deberán ser parametrizables 
 al menos: el puerto por el que atenderá el servidor y la ruta del sistema de archivos que será 
 la raíz de la dirección web.
 
@@ -30,11 +31,11 @@ archivo ejecutable en cuestión.
 
 * Apache benchmark: ab -c 5 -n 10000
 
-* Debe poder manejar como mínimo los siguientes tipos de archivos: jpg, html, text, pdf, mp3, mp4,
+LISTO * Debe poder manejar como mínimo los siguientes tipos de archivos: jpg, html, text, pdf, mp3, mp4,
 gif, json.
 
-* Debe devolver como mínimo, cinco tipos de resultados al cliente: 200, 400, 403, 404 y 500 (Ver 
-especificación de HTTP 1.0).
+LISTO * Debe devolver como mínimo, cinco tipos de resultados al cliente: 200, 400, 403, 404 y 500 (Ver 
+especificación de HTTP 1.0). 
 
 * El servidor debe manejar como mínimo los métodos GET y POST.
 

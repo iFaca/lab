@@ -18,7 +18,7 @@ int identificarPuerto(char * archivo){
 	token = strtok(token,"\n");
 	puerto = atoi(token);
 
-	printf("El puerto del archivo de configuración es: %i \n",puerto);
+	printf("Puerto: %i \n",puerto);
 
 	close(file);
 	return puerto;

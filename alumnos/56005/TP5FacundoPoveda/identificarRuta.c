@@ -16,7 +16,7 @@ char* identificarRuta(char * archivo){
 	strtok(NULL,"=");
 	ruta = strtok(NULL,"=");
 	
-	printf("La ruta del archivo de configuración es: %s \n",ruta);	
+	printf("Ruta: %s \n",ruta);	
 	
 	close(file);
 	return ruta;

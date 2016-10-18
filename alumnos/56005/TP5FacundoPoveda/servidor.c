@@ -1,75 +1,88 @@
 #include "servidor.h"
 
 int main(int arg, char **argv){
-	socklen_t largo;
-	largo = sizeof(struct sockaddr);
-	int scd;
-	int leer;
-        char buffer[1024];
-	char *aux;
+	socklen_t largo = sizeof(struct sockaddr);
 	int abrirSocket();
-	int response;
-	pid_t pid;
 	struct sockaddr_in cli_dir;
 	char * rutaMultimedia;
 	char * archivo;
+	int opcion;	
+	int * sockDesc;
+	int listener;
+	int scd;
+	int val=1;
+	int PORT;
 
-	//Leemos el nombre del archivo de configuración
-	archivo = argv[1];
-	
-	//Identificamos el puerto del archivo de configuración
-	int PORT = identificarPuerto(archivo);
+	//Atributos hilo
+	pthread_t idHilo;
+	pthread_attr_t atributo;
+	pthread_attr_init(&atributo);
+	pthread_attr_setdetachstate(&atributo, PTHREAD_CREATE_DETACHED);
 
-	//Identificamos la ruta del archivo de configuración
-	rutaMultimedia = identificarRuta(archivo);
+	//Leemos las opciones
+	while ((opcion = getopt(arg,argv,"f:p:r:")) != -1){
+		switch (opcion){
+			case 'f':
+				//Leemos el nombre del archivo de configuración
+				archivo = optarg;
+				//Identificamos el puerto del archivo de configuración
+				PORT = identificarPuerto(archivo);
+				//Identificamos la ruta del archivo de configuración
+				rutaMultimedia = identificarRuta(archivo);
+				break;
+			case 'p':
+				//Si el usuario nos ingresa el puerto por consola
+				PORT = atoi(optarg);
+				break;
+			case 'r':
+				//Si el usuario nos ingresa el path por consola
+				rutaMultimedia = optarg;
+				break;
+			case '?':
+				if (optopt == 'f')
+					fprintf(stderr,"La opción -%c necesita un argumaneto\n",optopt);
+				else if (optopt == 'p')
+                                        fprintf(stderr,"La opción -%c necesita el puerto \n",optopt);
+                                else if (optopt == 'r')
+                                        fprintf(stderr,"La opción -%c necesita la ruta \n",optopt);
+                                else
+					fprintf(stderr,"Opción desconocida -%c. \n",optopt);
+				return 0;
+		}	
+	}
 
 	//Intentamos abrir el socket
-	int listener = abrirSocket();
+	listener = abrirSocket();
 	if (listener == -1){
 		printf("Error en el listener \n");
 		return -1;
 	}
 
+	//Seteamos opciones al socket 
+	setsockopt(listener,SOL_SOCKET, SO_REUSEADDR,(void *)&val,sizeof(val));
+
 	//Intentamos hacer el enlace (bind)
 	enlazarAlPuerto(listener, PORT);
 
-	//Hago una cola para que esperen 10 clientes mientras proceso 1
+	//Hago una cola para que esperen 10 clientes mientras proceso uno
 	if (listen (listener,10) == -1){
 		printf("No es posible escuchar en ese puerto \n");
 		return -1;
 	}else{
 		printf("Enlazado al puerto %i \n",PORT);
+		printf("Esperando al cliente \n");
 	}
-	
-	//Elimina el problema con los zombies
-	signal(SIGCHLD ,SIG_IGN);
-	
-	printf("Esperando al cliente \n");	
 
 	//Aceptamos la primer conexión y la procesamos
 	while ((scd = accept(listener, (struct sockaddr *) &cli_dir, &largo)) > 0 ){
-		//Creamos un hijo por cada usuario que se conecte para atenderlos a todos a la vez
-		pid = fork(); 
-		//Lo unico que hace el padre es pasar las conexiones a los hijos; no trabaja
-		if(pid == 0){
-			//Leemos la petición del cliente para analizarla
-			leer = read(scd,buffer,1024);
-			write(STDOUT_FILENO,buffer,leer);
-
-			//Analizamos la petición
-			strtok(buffer," ");
-			aux = strtok(NULL," ");
-			aux = strtok(aux,"/");
-			
-			write(STDOUT_FILENO,aux,sizeof(aux));
-			printf("\n\n");
-			//Imprimimos la ip y el puerto del cliente - Network TO HoSt
-			printf("Cliente: %s : %d \n", inet_ntoa (cli_dir.sin_addr),ntohs(cli_dir.sin_port));
-			close(listener);
-			response = mostrarRespuesta(scd,aux);
-			return 0;
+		sockDesc=malloc(sizeof (int));
+		*sockDesc=scd;
+		//Creamos un hilo por cada cliente
+		if ((pthread_create(&idHilo,&atributo,&funcionHilo,(void *)sockDesc))!=0){
+			perror("Error en la creación del hilo");
+			return -1;
 		}
-		close(scd);
 	}
+	perror("Accept: ");
 	return 0;
 }
