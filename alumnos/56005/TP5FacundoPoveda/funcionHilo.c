@@ -6,6 +6,9 @@ void * funcionHilo(void * sdConn){
 	char *aux;
 	int response;
 	int scd = *((int *)sdConn);
+	int get=0;
+	int post=0;
+	
 	//Liberamos memoria
 	free(sdConn);
 
@@ -15,9 +18,15 @@ void * funcionHilo(void * sdConn){
 
 	//Analizamos la petición
 	strtok(buffer," ");
+	//Analizamos si se envía un GET o un POST
+	if(strcmp(buffer, "GET") == 0){
+	get=1;
+	}
+        if(strcmp(buffer, "POST") == 0){
+        post=1;
+        }
 	aux = strtok(NULL," ");
 	aux = strtok(aux,"/");
-	printf("Petición: %s \n",aux);
 	printf("\n");
 
 	//Excepción null
@@ -29,7 +38,9 @@ void * funcionHilo(void * sdConn){
 
 	//Enviamos la respuesta al cliente
 	response = mostrarRespuesta(scd,aux);
-	//close(scd);
+	//Ponemos los flags en 0 nuevamente
+	get=0;
+	post=0;
 	pthread_exit(NULL);
 	return NULL;
 }
